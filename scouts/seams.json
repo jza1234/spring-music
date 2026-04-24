@@ -1,0 +1,59 @@
+{
+  "project": "spring-music",
+  "description": "Natural extraction boundaries identified in the Spring Music codebase",
+  "seams": [
+    {
+      "id": "S1",
+      "name": "Web / API Layer",
+      "description": "All HTTP controllers handling REST endpoints for albums, health info, and errors",
+      "files": [
+        "src/main/java/org/cloudfoundry/samples/music/web/AlbumController.java",
+        "src/main/java/org/cloudfoundry/samples/music/web/ErrorController.java",
+        "src/main/java/org/cloudfoundry/samples/music/web/InfoController.java"
+      ],
+      "notes": "Entry point for all client requests. Depends on domain model and repository abstraction."
+    },
+    {
+      "id": "S2",
+      "name": "Domain Model",
+      "description": "Core business entities — Album, ApplicationInfo, and ID generation utilities",
+      "files": [
+        "src/main/java/org/cloudfoundry/samples/music/domain/Album.java",
+        "src/main/java/org/cloudfoundry/samples/music/domain/ApplicationInfo.java",
+        "src/main/java/org/cloudfoundry/samples/music/domain/RandomIdGenerator.java"
+      ],
+      "notes": "Shared across all layers. JPA annotations couple it to relational persistence; Mongo uses same POJO."
+    },
+    {
+      "id": "S3",
+      "name": "Persistence / Repository Layer",
+      "description": "All store implementations: JPA (H2/MySQL/Postgres), MongoDB, Redis, and in-memory",
+      "files": [
+        "src/main/java/org/cloudfoundry/samples/music/repositories/AlbumRepository.java",
+        "src/main/java/org/cloudfoundry/samples/music/repositories/jpa/JpaAlbumRepository.java",
+        "src/main/java/org/cloudfoundry/samples/music/repositories/mongodb/MongoAlbumRepository.java",
+        "src/main/java/org/cloudfoundry/samples/music/repositories/redis/RedisAlbumRepository.java"
+      ],
+      "notes": "Four different backends behind one interface. Spring profiles select implementation at runtime."
+    },
+    {
+      "id": "S4",
+      "name": "Application Configuration",
+      "description": "Spring context initializer and Redis-specific bean wiring",
+      "files": [
+        "src/main/java/org/cloudfoundry/samples/music/config/SpringApplicationContextInitializer.java",
+        "src/main/java/org/cloudfoundry/samples/music/config/data/RedisConfig.java"
+      ],
+      "notes": "Controls which persistence profile is active. Tightly coupled to Cloud Foundry VCAP_SERVICES env vars."
+    },
+    {
+      "id": "S5",
+      "name": "Bootstrap / Seed Data",
+      "description": "Populates the album repository with sample data on startup",
+      "files": [
+        "src/main/java/org/cloudfoundry/samples/music/repositories/AlbumRepositoryPopulator.java"
+      ],
+      "notes": "Only needed in dev/demo. Hard-codes domain objects. Extracting it breaks no business logic."
+    }
+  ]
+}
