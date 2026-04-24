@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>User Stories — Spring Music / Northwind Logistics</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f0f2f5;
+      color: #1a1a2e;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+      color: #fff;
+      padding: 2.5rem 2rem 2rem;
+    }
+    header h1 { font-size: 1.75rem; font-weight: 700; letter-spacing: -0.5px; }
+    header p  { margin-top: 0.4rem; color: #a0aec0; font-size: 0.9rem; }
+
+    .context-box {
+      background: #fff7ed;
+      border-left: 4px solid #f97316;
+      margin: 1.5rem auto;
+      max-width: 960px;
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.88rem;
+      color: #7c3c00;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 1.5rem 1rem 4rem;
+    }
+
+    /* Personas table */
+    .personas {
+      background: #fff;
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    .personas h2 { font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; color: #64748b; margin-bottom: 0.75rem; }
+    .personas table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .personas td { padding: 0.4rem 0.75rem; border-bottom: 1px solid #f1f5f9; }
+    .personas tr:last-child td { border-bottom: none; }
+    .personas td:first-child { font-weight: 600; white-space: nowrap; color: #0f3460; width: 160px; }
+
+    /* Capability group */
+    .cap-group { margin-bottom: 2.5rem; }
+    .cap-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .cap-badge {
+      background: #0f3460;
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .cap-header h2 { font-size: 1.15rem; font-weight: 700; color: #1a1a2e; }
+
+    /* Story card */
+    .story-card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    .story-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 1.25rem;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+      cursor: pointer;
+      user-select: none;
+    }
+    .story-card-header:hover { background: #f1f5f9; }
+    .story-id {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #94a3b8;
+      letter-spacing: 0.5px;
+    }
+    .story-title { font-size: 0.95rem; font-weight: 600; color: #1e293b; }
+    .chevron { transition: transform 0.2s; font-size: 0.8rem; color: #94a3b8; }
+    .story-card.open .chevron { transform: rotate(180deg); }
+
+    .story-body { display: none; padding: 1.25rem 1.5rem; }
+    .story-card.open .story-body { display: block; }
+
+    .user-story-text {
+      font-size: 0.95rem;
+      background: #f8fafc;
+      border-left: 3px solid #3b82f6;
+      padding: 0.6rem 1rem;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 1.25rem;
+      color: #334155;
+    }
+    .user-story-text strong { color: #1e40af; }
+
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #94a3b8;
+      margin-bottom: 0.5rem;
+    }
+
+    .ac-list { list-style: none; margin-bottom: 1.25rem; }
+    .ac-list li {
+      display: flex;
+      gap: 0.6rem;
+      align-items: flex-start;
+      padding: 0.35rem 0;
+      border-bottom: 1px solid #f1f5f9;
+      font-size: 0.88rem;
+    }
+    .ac-list li:last-child { border-bottom: none; }
+    .ac-num {
+      background: #e0f2fe;
+      color: #0369a1;
+      font-size: 0.7rem;
+      font-weight: 700;
+      min-width: 1.4rem;
+      height: 1.4rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .out-of-scope {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      margin-bottom: 1rem;
+    }
+    .out-of-scope span { font-weight: 600; }
+
+    .dispute {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      font-size: 0.84rem;
+      color: #7c3c00;
+    }
+    .dispute-title {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: #c2410c;
+    }
+    .dispute-title::before { content: "⚠"; }
+    .dispute p { margin-bottom: 0.3rem; }
+    .dispute .status { font-weight: 700; color: #9a3412; }
+
+    /* Priority table */
+    .priority-section {
+      background: #fff;
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      margin-top: 2rem;
+    }
+    .priority-section h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 1rem; }
+    .priority-section table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    .priority-section th {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      background: #f8fafc;
+      color: #64748b;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .priority-section td { padding: 0.55rem 0.75rem; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+    .priority-section tr:last-child td { border-bottom: none; }
+    .rank-badge {
+      display: inline-block;
+      width: 1.6rem;
+      height: 1.6rem;
+      background: #0f3460;
+      color: #fff;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 1.6rem;
+      font-weight: 700;
+      font-size: 0.8rem;
+    }
+    .rank-badge.r1 { background: #f59e0b; }
+    .rank-badge.r2 { background: #64748b; }
+    .rank-badge.r3 { background: #94a3b8; }
+
+    .note-box {
+      margin-top: 0.75rem;
+      font-size: 0.82rem;
+      color: #7c3c00;
+      background: #fff7ed;
+      border-left: 3px solid #f97316;
+      padding: 0.6rem 0.75rem;
+      border-radius: 0 6px 6px 0;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>User Stories — Spring Music / Northwind Logistics Catalog</h1>
+  <p>PM/BA Deliverable &bull; Scenario 1: Code Modernization &bull; The Stories Waypoint</p>
+</header>
+
+<main>
+
+  <div class="context-box">
+    Northwind Logistics runs a catalog service built on Spring Boot 2.4. The board approved
+    "modernization" without defining it. These stories capture what the system must continue to do
+    correctly through any modernization effort, and where stakeholders disagree about scope. Stories
+    are written against the current API surface so they can be used directly as a basis for
+    characterization tests (The Pin) before any refactoring begins.
+  </div>
+
+  <!-- Personas -->
+  <div class="personas">
+    <h2>Personas</h2>
+    <table>
+      <tr><td>Catalog User</td><td>Internal staff browsing the album/catalog data</td></tr>
+      <tr><td>Catalog Curator</td><td>Staff who add, edit, or remove catalog entries</td></tr>
+      <tr><td>Ops Engineer</td><td>Responsible for deployment, monitoring, and uptime</td></tr>
+      <tr><td>Developer</td><td>Engineer working on the codebase</td></tr>
+    </table>
+  </div>
+
+  <!-- CAP-1 -->
+  <div class="cap-group">
+    <div class="cap-header">
+      <span class="cap-badge">CAP-1</span>
+      <h2>Browse the Album Catalog</h2>
+    </div>
+
+    <div class="story-card open">
+      <div class="story-card-header" onclick="toggle(this)">
+        <div>
+          <div class="story-id">CAP-1-S1</div>
+          <div class="story-title">View the full catalog</div>
+        </div>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="story-body">
+        <div class="user-story-text">
+          <strong>As a</strong> Catalog User
+          <strong> I want</strong> to retrieve a list of all albums in the system
+          <strong> so that</strong> I can see everything currently in the catalog
+        </div>
+        <div class="section-label">Acceptance Criteria</div>
+        <ol class="ac-list">
+          <li><span class="ac-num">1</span><span><code>GET /albums</code> returns HTTP 200</span></li>
+          <li><span class="ac-num">2</span><span>The response body is a JSON array</span></li>
+          <li><span class="ac-num">3</span><span>Each element contains at minimum: <code>id</code>, <code>title</code>, <code>artist</code>, <code>releaseYear</code>, <code>genre</code>, <code>trackCount</code></span></li>
+          <li><span class="ac-num">4</span><span>When the catalog has been pre-populated on first startup, the response contains at least 20 albums</span></li>
+          <li><span class="ac-num">5</span><span>An empty catalog returns an empty JSON array <code>[]</code>, not a 404 or error</span></li>
+        </ol>
+        <div class="out-of-scope"><span>Out of scope:</span> Pagination, filtering, sorting</div>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-card-header" onclick="toggle(this)">
+        <div>
+          <div class="story-id">CAP-1-S2</div>
+          <div class="story-title">Retrieve a single album by ID</div>
+        </div>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="story-body">
+        <div class="user-story-text">
+          <strong>As a</strong> Catalog User
+          <strong> I want</strong> to fetch one album by its unique identifier
+          <strong> so that</strong> I can view its full details without loading the entire catalog
+        </div>
+        <div class="section-label">Acceptance Criteria</div>
+        <ol class="ac-list">
+          <li><span class="ac-num">1</span><span><code>GET /albums/{id}</code> with a valid existing ID returns HTTP 200 and the album object</span></li>
+          <li><span class="ac-num">2</span><span>The response contains all fields: <code>id</code>, <code>title</code>, <code>artist</code>, <code>releaseYear</code>, <code>genre</code>, <code>trackCount</code>, <code>albumId</code></span></li>
+          <li><span class="ac-num">3</span><span><code>GET /albums/{id}</code> with a non-existent ID returns HTTP 404</span></li>
+          <li><span class="ac-num">4</span><span><code>GET /albums/{id}</code> with a malformed or empty ID returns HTTP 400 or 404 (not 500)</span></li>
+        </ol>
+        <div class="out-of-scope"><span>Out of scope:</span> Fuzzy lookup by title or artist</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAP-2 -->
+  <div class="cap-group">
+    <div class="cap-header">
+      <span class="cap-badge">CAP-2</span>
+      <h2>Add / Update / Remove Albums</h2>
+    </div>
+
+    <div class="story-card">
+      <div class="story-card-header" onclick="toggle(this)">
+        <div>
+          <div class="story-id">CAP-2-S1</div>
+          <div class="story-title">Add a new album</div>
+        </div>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="story-body">
+        <div class="user-story-text">
+          <strong>As a</strong> Catalog Curator
+          <strong> I want</strong> to add a new album to the catalog
+          <strong> so that</strong> the collection stays current
+        </div>
+        <div class="section-label">Acceptance Criteria</div>
+        <ol class="ac-list">
+          <li><span class="ac-num">1</span><span><code>PUT /albums</code> with a valid JSON body returns HTTP 200 or 201</span></li>
+          <li><span class="ac-num">2</span><span>The response body includes the newly created album with a system-generated <code>id</code> (UUID format)</span></li>
+          <li><span class="ac-num">3</span><span>The new album is retrievable via <code>GET /albums/{id}</code> immediately after creation</span></li>
+          <li><span class="ac-num">4</span><span><code>PUT /albums</code> with a missing required field returns HTTP 400, not 500</span></li>
+          <li><span class="ac-num">5</span><span>Two successive <code>PUT /albums</code> calls with identical data create two distinct albums with different IDs</span></li>
+        </ol>
+        <div class="out-of-scope"><span>Out of scope:</span> Duplicate detection, image upload</div>
+        <div class="dispute">
+          <div class="dispute-title">Stakeholder Disagreement — Priority</div>
+          <p><strong>Dev team</strong> wants this story deprioritized until the multi-DB profile layer (CAP-3) is stabilized first.</p>
+          <p><strong>Business</strong> wants CAP-2 as the first extraction target because curators are blocked by the current UI.</p>
+          <p class="status">Status: UNRESOLVED — The decomposition plan (The Map) must address this before sprint planning.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-card-header" onclick="toggle(this)">
+        <div>
+          <div class="story-id">CAP-2-S2</div>
+          <div class="story-title">Update an existing album</div>
+        </div>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="story-body">
+        <div class="user-story-text">
+          <strong>As a</strong> Catalog Curator
+          <strong> I want</strong> to correct or update metadata on an existing album
+          <strong> so that</strong> the catalog reflects accurate information
+        </div>
+        <div class="section-label">Acceptance Criteria</div>
+        <ol class="ac-list">
+          <li><span class="ac-num">1</span><span><code>POST /albums</code> with a valid JSON body containing an existing <code>id</code> returns HTTP 200</span></li>
+          <li><span class="ac-num">2</span><span>Updated fields are reflected in subsequent <code>GET /albums/{id}</code> responses</span></li>
+          <li><span class="ac-num">3</span><span>Fields not included in the request body are not cleared or nulled out</span></li>
+          <li><span class="ac-num">4</span><span><code>POST /albums</code> with a non-existent <code>id</code> returns HTTP 404, not a silent insert</span></li>
+          <li><span class="ac-num">5</span><span>Updating <code>id</code> itself is rejected (HTTP 400) — IDs are immutable</span></li>
+        </ol>
+        <div class="out-of-scope"><span>Out of scope:</span> Partial patch (PATCH), field-level audit trail</div>
+        <div class="dispute">
+          <div class="dispute-title">Stakeholder Disagreement — Test Coverage Gate</div>
+          <p><strong>QA</strong> requires characterization tests (The Pin) to be green before any changes to the update path.</p>
+          <p><strong>PM</strong> has delivery pressure to ship the curator UI fix this sprint.</p>
+          <p class="status">Status: UNRESOLVED — Recommendation: QA's gate wins. A broken update path in prod is worse than a delayed sprint.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-card">
+      <div class="story-card-header" onclick="toggle(this)">
+        <div>
+          <div class="story-id">CAP-2-S3</div>
+          <div class="story-title">Delete an album</div>
+        </div>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="story-body">
+        <div class="user-story-text">
+          <strong>As a</strong> Catalog Curator
+          <strong> I want</strong> to remove an album from the catalog
+          <strong> so that</strong> the collection only contains relevant entries
+        </div>
+        <div class="section-label">Acceptance Criteria</div>
+        <ol class="ac-list">
+          <li><span class="ac-num">1</span><span><code>DELETE /albums/{id}</code> with a valid existing ID returns HTTP 200 or 204</span></li>
+          <li><span class="ac-num">2</span><span>Subsequent <code>GET /albums/{id}</code> for the deleted album returns HTTP 404</span></li>
+          <li><span class="ac-num">3</span><span>The deleted album no longer appears in <code>GET /albums</code></span></li>
+          <li><span class="ac-num">4</span><span><code>DELETE /albums/{id}</code> with a non-existent ID returns HTTP 404, not 200</span></li>
+          <li><span class="ac-num">5</span><span>A second <code>DELETE</code> on the same ID returns 404 (not 200 or 500)</span></li>
+        </ol>
+        <div class="out-of-scope"><span>Out of scope:</span> Soft delete, archive, undo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAP-3 -->
+  <div class="cap-group">
+    <div class="cap-header">
+      <span class="cap-badge">CAP-3</span>
+      <h2>Database Backend Flexibility</h2>
+    </div>
+
+    <div class="story-card">
+      <div class="story-card-header" onclick="toggle(this)">
+        <div>
+          <div class="story-id">CAP-3-S1</div>
+          <div class="story-title">App starts and serves data against any supported backend</div>
+        </div>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="story-body">
+        <div class="user-story-text">
+          <strong>As an</strong> Ops Engineer
+          <strong> I want</strong> the application to function correctly regardless of which database backend is bound
+          <strong> so that</strong> I can deploy to any environment without code changes
+        </div>
+        <div class="section-label">Acceptance Criteria</div>
+        <ol class="ac-list">
+          <li><span class="ac-num">1</span><span>With no active profile (default/H2), app starts and <code>GET /albums</code> returns data</span></li>
+          <li><span class="ac-num">2</span><span>With profile <code>mysql</code>, app connects to MySQL and <code>GET /albums</code> returns data</span></li>
+          <li><span class="ac-num">3</span><span>With profile <code>mongodb</code>, app connects to MongoDB and <code>GET /albums</code> returns data</span></li>
+          <li><span class="ac-num">4</span><span>With profile <code>redis</code>, app connects to Redis and <code>GET /albums</code> returns data</span></li>
+          <li><span class="ac-num">5</span><span>Activating more than one database profile simultaneously causes a clear startup failure (not silent data inconsistency)</span></li>
+          <li><span class="ac-num">6</span><span>The API response structure of <code>GET /albums</code> is identical regardless of which backend is active</span></li>
+        </ol>
+        <div class="out-of-scope"><span>Out of scope:</span> Live migration of data between backends, simultaneous multi-backend writes</div>
+        <div class="dispute">
+          <div class="dispute-title">Stakeholder Disagreement — "Modernize" Means What?</div>
+          <p><strong>CTO</strong> interprets modernization as decomposing the multi-profile capability into separate microservices behind an API gateway.</p>
+          <p><strong>Ops</strong> says: containerize the monolith as-is and ship it — profile switching is a feature, not a problem.</p>
+          <p class="status">Status: UNRESOLVED — Highest-impact disagreement. The ADR (The Map) must make a binding decision before CAP-3 is touched.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAP-4 -->
+  <div class="cap-group">
+    <div class="cap-header">
+      <span class="cap-badge">CAP-4</span>
+      <h2>Sample Data Initialization</h2>
+    </div>
+
+    <div class="story-card">
+      <div class="story-card-header" onclick="toggle(this)">
+        <div>
+          <div class="story-id">CAP-4-S1</div>
+          <div class="story-title">Catalog is pre-populated on first startup</div>
+        </div>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="story-body">
+        <div class="user-story-text">
+          <strong>As a</strong> Catalog User
+          <strong> I want</strong> the catalog to contain sample data when first deployed
+          <strong> so that</strong> the system is immediately usable for demonstration and onboarding
+        </div>
+        <div class="section-label">Acceptance Criteria</div>
+        <ol class="ac-list">
+          <li><span class="ac-num">1</span><span>On first startup against an empty database, <code>GET /albums</code> returns exactly 28 albums</span></li>
+          <li><span class="ac-num">2</span><span>Sample albums include: The Beatles, The Rolling Stones, Led Zeppelin, Nirvana (spot-check)</span></li>
+          <li><span class="ac-num">3</span><span>On subsequent restarts against a non-empty database, no duplicate albums are added</span></li>
+          <li><span class="ac-num">4</span><span>If a curator has deleted albums, a restart does not restore the deleted items</span></li>
+          <li><span class="ac-num">5</span><span>Initialization completes before the first HTTP request is served — no race condition window where <code>GET /albums</code> briefly returns <code>[]</code></span></li>
+        </ol>
+        <div class="out-of-scope"><span>Out of scope:</span> Seeding with production data, environment-specific seed sets</div>
+        <div class="dispute">
+          <div class="dispute-title">Stakeholder Disagreement — Sample Data in Production</div>
+          <p><strong>Business</strong> wants sample data removed from production deployments — classic rock albums in a logistics catalog looks unprofessional.</p>
+          <p><strong>Dev</strong> wants to keep it — it's the only reliable way to demo the system end-to-end.</p>
+          <p class="status">Recommended resolution: Make seed data opt-in via a Spring profile (<code>--spring.profiles.active=seed</code>). Neither side loses. Add as a story next sprint.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CAP-5 -->
+  <div class="cap-group">
+    <div class="cap-header">
+      <span class="cap-badge">CAP-5</span>
+      <h2>Application Health Visibility</h2>
+    </div>
+
+    <div class="story-card">
+      <div class="story-card-header" onclick="toggle(this)">
+        <div>
+          <div class="story-id">CAP-5-S1</div>
+          <div class="story-title">Ops can see which database profile is active at runtime</div>
+        </div>
+        <span class="chevron">&#9660;</span>
+      </div>
+      <div class="story-body">
+        <div class="user-story-text">
+          <strong>As an</strong> Ops Engineer
+          <strong> I want</strong> to query the running application and know which database backend and Spring profiles are active
+          <strong> so that</strong> I can confirm the correct configuration was applied after deployment
+        </div>
+        <div class="section-label">Acceptance Criteria</div>
+        <ol class="ac-list">
+          <li><span class="ac-num">1</span><span><code>GET /appinfo</code> returns HTTP 200</span></li>
+          <li><span class="ac-num">2</span><span>The response includes a <code>profiles</code> field listing all active Spring profiles as an array</span></li>
+          <li><span class="ac-num">3</span><span>When running with the H2 default, <code>profiles</code> reflects that (empty array or <code>["default"]</code> is acceptable)</span></li>
+          <li><span class="ac-num">4</span><span>When running with <code>mysql</code> profile, <code>profiles</code> contains <code>"mysql"</code></span></li>
+          <li><span class="ac-num">5</span><span>The response includes a <code>services</code> field — may be empty in local deployments but must be present</span></li>
+          <li><span class="ac-num">6</span><span><code>GET /appinfo</code> is available without authentication</span></li>
+        </ol>
+        <div class="out-of-scope"><span>Out of scope:</span> Prometheus metrics, distributed tracing, log aggregation</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Priority -->
+  <div class="priority-section">
+    <h2>Priority Stack Rank (PM Recommendation)</h2>
+    <table>
+      <thead>
+        <tr><th>Rank</th><th>Story</th><th>Rationale</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rank-badge r1">1</span></td>
+          <td>CAP-1-S1, CAP-1-S2</td>
+          <td>Read path must be stable before any extraction</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge r2">2</span></td>
+          <td>CAP-5-S1</td>
+          <td>Ops needs visibility before any deployment changes</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge r3">3</span></td>
+          <td>CAP-4-S1</td>
+          <td>Hidden dependency — must be pinned before refactoring</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge">4</span></td>
+          <td>CAP-2-S1, CAP-2-S2, CAP-2-S3</td>
+          <td>High business value but blocked by QA test coverage gate</td>
+        </tr>
+        <tr>
+          <td><span class="rank-badge">5</span></td>
+          <td>CAP-3-S1</td>
+          <td>Most complex, most disputed — needs ADR before implementation</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note-box">
+      This rank is the PM's recommendation. Dev team and Ops have both objected to items 4 and 5 respectively.
+      See stakeholder notes in each story. The decomposition plan (The Map) is a prerequisite for resolving CAP-3.
+    </div>
+  </div>
+
+</main>
+
+<script>
+  function toggle(header) {
+    const card = header.closest('.story-card');
+    card.classList.toggle('open');
+  }
+</script>
+</body>
+</html>
